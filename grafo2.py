@@ -18,35 +18,44 @@ class Grafo:
   
   def grau(self, v):
     """ Definição: Arestas entrantes no vértice v
-        ### TODO: Corrigir: Está retornando valor errado
+        ### Corrigido
     """
-    return len(self.E[v])
+    return len([vizinho for vizinho in self.E if v in vizinho])
   
   def rotulo(self, v):
     """ Definição: Nome do vértice
-        ### TODO: Corrigir: Retornar apenas o rótulo (nome) do vértice
+        ### Corrigido
     """
-    return self.V[v]
+    return self.V[v][1]
   
   def vizinhos(self, v):
     """ Definição: Vizinhos do vértice v
-        ### TODO: Corrigir
+        ### Corrigido
     """
-    return self.E[v]
+    arestas_vizinhos_v = [vizinho for vizinho in self.E if v in vizinho]
+    vizinhos = []
+    for aresta in arestas_vizinhos_v:
+      a, b = aresta[0], aresta[1]
+      if a == v:
+        vizinhos.append(b)
+      else:
+        vizinhos.append(a)
+    
+    return [vertice for vertice in self.V if vertice[0] in vizinhos]
   
   def haAresta(self, u, v):
-    """ Retorna:
-        True - Existe a aresta u -> v ou v -> u
-        False - Não existe a aresta u -> v ou v ->
-        ### TODO: Corrigir
     """
-    return u in self.E[v]
+        ### Corrigido
+    """
+    return (u in self.E[v]) or (v in self.E[u])
   
   def peso(self, u, v):
     """
-        ### TODO: Corrigir (0, 3) == (3,0)
+        ### Corrigido
     """
-    return self.w[(u, v)] if (u, v) in self.w else inf
+    if not ( (u, v) in self.w or (v, u) in self.w ):
+        return inf
+    return self.w[(u, v)] if (u, v) in self.w else self.w[(v, u)]
 
   def ler(self, nomeArquivo):
     with open(nomeArquivo, "r") as f:
