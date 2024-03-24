@@ -1,7 +1,8 @@
 from math import inf
+import re
 
 class Grafo:
-  def __init__(self, V, E, w) -> None:
+  def __init__(self, V = [], E = [], w = {}) -> None:
     self.V = V
     self.E = E
     self.w = w
@@ -31,4 +32,27 @@ class Grafo:
     return self.w[(u, v)] if (u, v) in self.w else inf
 
   def ler(self, nomeArquivo):
-    pass
+    with open(nomeArquivo, "r") as f:
+      lines = f.readlines()
+      current_read = ""
+
+      for line in lines:
+        if line.startswith("*vertices"):
+          current_read = "vertices"
+          continue
+        elif line.startswith("*edges"):
+          current_read = "edges"
+          continue
+  
+        if current_read == "vertices":
+          name = line.split('"')[1]
+          id = line.split()[0]
+          self.V.append((id, name))
+          
+        if current_read == "edges":
+          u, v, w = line.split()
+          u, v, w = int(u), int(v), float(w)
+          self.E.append((u, v))
+          self.w[(u, v)] = w
+          
+      return self

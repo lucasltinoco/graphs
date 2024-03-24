@@ -1,7 +1,7 @@
 from grafo import Grafo
 
 def main():
-  V = [0, 1, 2, 3]
+  V = [(0, "A"), (1, "B"), (2, "C"), (3, "D")]
   E = [(0, 1), (1, 2), (2, 3), (3, 0)]
   w = { (0, 1): 1, (1, 2): 2, (2, 3): 3, (3, 0): 4 }
   G = Grafo(V, E, w)
@@ -16,6 +16,8 @@ def main():
   print(G.peso(0, 1))
   print(G.peso(0, 2))
   print(G.peso(0, 3))
+  G2 = Grafo()
+  print(G2.ler("facebook_santiago.net"))
   
 if __name__ == "__main__":
   main()
