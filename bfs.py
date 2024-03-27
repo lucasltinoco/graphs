@@ -11,9 +11,42 @@ args:
 """
 from grafo import Grafo
 import sys, os
+from math import inf
+from queue import Queue
 
 def bfs(graph: Grafo, s: int):
-    pass
+    """
+    PROBLEMA: O algoritmo não encerra o loop, mesmo após ter passado por todos os vertices. 
+
+    SOLUÇÃO: ???
+    """
+    C = [] # Conhecido
+    D = [] # Distancia
+    A = [] # Ancestral
+    
+    for i in range(graph.qtdVertices() + 1):
+        C.append(False)
+        D.append(inf)
+        A.append(None)
+
+    C[s] = True
+    D[s] = 0
+    Q = Queue()
+    Q.put(s)
+
+    while Q:
+        current_node = Q.get() # Retiro o vertice da queue
+        print("\n\n> Visitando vertice:",current_node)
+
+        for vizinho in graph.vizinhos(current_node):
+            if not C[vizinho]:
+                C[vizinho] = True
+                D[vizinho] = D[current_node] + 1
+                Q.put(vizinho)
+                print("- Conhecendo vertice:", vizinho)
+    print(D)
+    return (D, A)
+
 
 
 if __name__ == "__main__":
@@ -22,7 +55,7 @@ if __name__ == "__main__":
         sys.exit(1)
 
     graph_filename = sys.argv[1]
-    graph_index = sys.argv[2]
+    graph_index = int(sys.argv[2])
 
     # Verifica se o nome do arquivo passado existe
     if not os.path.exists(graph_filename):
