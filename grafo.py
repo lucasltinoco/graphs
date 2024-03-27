@@ -1,15 +1,18 @@
 from math import inf
-import re
+import os
 
 class Grafo:
   def __init__(self, V = [], E = [], w = {}) -> None:
-    self.V = V
-    self.E = E
-    self.w = w
+    self.V = V # Vertices
+    self.E = E # Arestas
+    self.w = w # Pesos das Arestas
 
   def __str__(self) -> str:
+    return f"Vertices: {self.V}\n\nArestas: {self.w}"
+
+  def __repr__(self):
     return f"Graph(V={self.V}, E={self.E}, w={self.w})"
-  
+
   def qtdVertices(self):
     return len(self.V)
   
@@ -17,39 +20,40 @@ class Grafo:
     return len(self.E)
   
   def grau(self, v):
-    """ Definição: Arestas entrantes no vértice v
-        ### TODO: Corrigir: Está retornando valor errado
-    """
-    return len(self.E[v])
+    return len([vizinho for vizinho in self.E if v in vizinho])
   
   def rotulo(self, v):
-    """ Definição: Nome do vértice
-        ### TODO: Corrigir: Retornar apenas o rótulo (nome) do vértice
-    """
-    return self.V[v]
+    return self.V[v][1]
   
   def vizinhos(self, v):
-    """ Definição: Vizinhos do vértice v
-        ### TODO: Corrigir
-    """
-    return self.E[v]
+    arestas_vizinhos_v = [vizinho for vizinho in self.E if v in vizinho]
+    vizinhos = []
+    for aresta in arestas_vizinhos_v:
+      a, b = aresta[0], aresta[1]
+      if a == v:
+        vizinhos.append(b)
+      else:
+        vizinhos.append(a)
+    
+    return [vertice for vertice in self.V if vertice[0] in vizinhos]
   
   def haAresta(self, u, v):
-    """ Retorna:
-        True - Existe a aresta u -> v ou v -> u
-        False - Não existe a aresta u -> v ou v ->
-        ### TODO: Corrigir
-    """
-    return u in self.E[v]
-  
-  def peso(self, u, v):
-    """
-        ### TODO: Corrigir (0, 3) == (3,0)
-    """
-    return self.w[(u, v)] if (u, v) in self.w else inf
+    return (u in self.E[v]) or (v in self.E[u])
 
-  def ler(self, nomeArquivo):
-    with open(nomeArquivo, "r") as f:
+  def haIndice(self, i: str) -> bool:
+    return any(v[0] == i for v in self.V)
+
+  def peso(self, u, v):
+    if not ( (u, v) in self.w or (v, u) in self.w ):
+        return inf
+    return self.w[(u, v)] if (u, v) in self.w else self.w[(v, u)]
+
+  def ler(self, nome_arquivo):
+    if not os.path.exists(nome_arquivo):
+      print(f"\n> Arquivo {nome_arquivo} não encontrado\n")
+      return None
+  
+    with open(nome_arquivo, "r") as f:
       lines = f.readlines()
       current_read = ""
 
