@@ -26,17 +26,26 @@ class Grafo:
     return self.V[v][1]
   
   def vizinhos(self, v):
+    """
+    Retorna uma lista de vizinhos do vértice 'v' no grafo.
+
+    Parâmetros:
+    - v: O vértice para o qual deseja-se obter os vizinhos.
+
+    Retorna:
+    Uma lista dos vértices vizinhos do vértice 'v' no grafo.
+    """
     arestas_vizinhos_v = [vizinho for vizinho in self.E if v in vizinho]
     vizinhos = []
     for aresta in arestas_vizinhos_v:
-      a, b = aresta[0], aresta[1]
-      if a == v:
-        vizinhos.append(b)
-      else:
-        vizinhos.append(a)
+        a, b = aresta[0], aresta[1]
+        if a == v:
+            vizinhos.append(b)
+        else:
+            vizinhos.append(a)
     
     return [vertice for vertice in self.V if vertice[0] in vizinhos]
-  
+
   def haAresta(self, u, v):
     return (u in self.E[v]) or (v in self.E[u])
 
