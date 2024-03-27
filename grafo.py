@@ -25,7 +25,7 @@ class Grafo:
   def rotulo(self, v):
     return self.V[v][1]
   
-  def vizinhos(self, v):
+  def vizinhos(self, v: int) -> list:
     """
     Retorna uma lista de vizinhos do vértice 'v' no grafo.
 
@@ -43,13 +43,13 @@ class Grafo:
         vizinhos.append(b)
       else:
         vizinhos.append(a)
-    return [vertice for vertice in self.V if vertice[0] in vizinhos]
+    return [vertice[0] for vertice in self.V if vertice[0] in vizinhos]
   
 
   def haAresta(self, u, v):
     return (u in self.E[v]) or (v in self.E[u])
 
-  def haIndice(self, i: str) -> bool:
+  def haIndice(self, i: int) -> bool:
     return any(v[0] == i for v in self.V)
 
   def peso(self, u, v):
