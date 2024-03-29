@@ -13,6 +13,7 @@ from grafo import Grafo
 import sys, os
 from math import inf
 from queue import Queue
+import pandas as pd
 
 def bfs(graph: Grafo, s: int):
     """
@@ -34,7 +35,7 @@ def bfs(graph: Grafo, s: int):
     Q = Queue()
     Q.put(s)
 
-    while Q:
+    while not Q.empty():
         current_node = Q.get() # Retiro o vertice da queue
         print("\n\n> Visitando vertice:",current_node)
 
@@ -42,9 +43,12 @@ def bfs(graph: Grafo, s: int):
             if not C[vizinho]:
                 C[vizinho] = True
                 D[vizinho] = D[current_node] + 1
+                A[vizinho] = current_node
                 Q.put(vizinho)
                 print("- Conhecendo vertice:", vizinho)
-    print(D)
+    
+    df = pd.DataFrame({'Conhecidos': C[1::], 'Distancias': D[1::], 'Ancestrais': A[1::]}, index=range(1, len(C)))
+    print('\n',df)
     return (D, A)
 
 
