@@ -16,11 +16,6 @@ from queue import Queue
 import pandas as pd
 
 def bfs(graph: Grafo, s: int):
-    """
-    PROBLEMA: O algoritmo não encerra o loop, mesmo após ter passado por todos os vertices. 
-
-    SOLUÇÃO: ???
-    """
     C = [] # Conhecido
     D = [] # Distancia
     A = [] # Ancestral
