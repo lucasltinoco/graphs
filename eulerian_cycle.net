@@ -1,0 +1,10 @@
+*vertices 10
+1 "Vertex 1"
+2 "Vertex 2"
+3 "Vertex 3"
+4 "Vertex 4"
+*edges
+1 2 1.0
+1 4 1.0
+2 3 1.0
+3 4 1.0

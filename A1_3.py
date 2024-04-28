@@ -1,96 +1,110 @@
-""" CICLO EULERIANO - Algoritmo de Hierholzer """
-import sys, os
-from grafo import Grafo
-from random import choice
+"""
+EULERIAN CYCLE IDENTIFIER
 
-def buscarSubCicloEuleriano(graph, v, C):
-    return
-    ciclo = [v]  # Inicializa o ciclo com o vértice v
+Algoritmo criado para identificar um ciclo euleriano em um grafo.
+
+Uso: python A1_3.py graph_filename
+
+args: 
+    graph: Grafo()
+"""
+
+from grafo import Grafo
+import sys, os
+import random
+
+
+def hierholzer(graph: Grafo):
+    C = {}
+    vertices = graph.V
+    edges = graph.E
+
+    for x in edges:
+        C[x] = False
+
+    v = random.choice(vertices)
+    r, ciclo = find_eulerian_subcycle(graph, v[0], C)
+
+    if r == False:
+        return False, None
+
+    else:
+        if False in C.values():
+            return False, None
+        else:
+            return True, ciclo
+
+
+def find_eulerian_subcycle(graph, v, C):
+    ciclo = [v]
     t = v
 
     while True:
-        # Procura por uma aresta não visitada conectada ao último vértice do ciclo
-        arestas_nao_visitadas = [aresta for aresta in graph.vizinhos(v) if not C[aresta]]
-        
-        if not arestas_nao_visitadas:
-            return (False, None)  # Não há arestas não visitadas, retorna falso
+        if not False in C.values():
+            return False, None
+        else:
+            not_visited = []
 
-        u, _ = arestas_nao_visitadas[0]  # Seleciona a primeira aresta não visitada
-        C[(v, u)] = True  # Marca a aresta como visitada
-        ciclo.append(u)  # Adiciona o vértice u ao ciclo
-        v = u
+            for k, i in C.items():
+                if i == False and (k[0] == v or k[1] == v):
+                    not_visited.append(k)
+
+            used = v
+            v = not_visited[0][0]
+            u = not_visited[0][1]
+            C[(v, u)] = True
+            v = u if u != used else v
+            ciclo.append(v)
 
         if v == t:
-            break  # Termina o loop quando alcança o vértice inicial do ciclo
-
-    # Verifica se há vértices no ciclo com arestas adjacentes não visitadas
-    for x in ciclo:
-        for u, w in graph.adjacencias(x):
-            if not C[(u, w)]:
-                r, ciclo0 = buscarSubCicloEuleriano(graph, x, C)
-                if not r:
-                    return (False, None)
-                
-                # Insere ciclo0 na posição de x em ciclo
-                index_x = ciclo.index(x)
-                ciclo = ciclo[:index_x] + ciclo0 + ciclo[index_x + 1:]
-
-    return True, ciclo  # Retorna verdadeiro e o ciclo euleriano encontrado
-
-
-def ciclo_euleriano(graph: Grafo):
-    C = []
-    for aresta in graph.E:
-        C.append(False)
-
-    v = None
-    lista_vertices = [vertice for vertice in graph.V if graph.grau(vertice[0]) > 0]
-
-    if lista_vertices:
-        v = choice(lista_vertices)
-        print(v)
-    else:
-        print("Não há vértices com grau maior que 0 no grafo.")
-
-    r, ciclo = buscarSubCicloEuleriano(graph, v, C)
-
-    if not r:
-        return (False, None)
-    else:
-        if False in C:
-            return (False, None)
-        else:
-            return (True, ciclo)
-
-def eulerian_cycle(graph: Grafo):
-    C = {}
-    v = 0
-
-    # Cria o vetor C com valor False para todos elementos
-    for i in range(graph.qtdArestas()):
-        C[graph.E[i]] = False
-
-    # Seleciona arbitrariamente um vertice
-    for i in range(1, graph.qtdVertices() + 1):
-        if graph.grau(i) > 0:
-            v = i
             break
 
-    if v == 0:
-        print("\n> Não existe ciclo euleriano\n")
-        return
+    vertices_in_cycle = [x for x in graph.V if x[0] in ciclo]
+    open_neighbors = []
 
-#     (r, cycle) = find_eulerian_subcycle(graph, v, C)
-#     print(r, cycle)
-    
+    for x in vertices_in_cycle:
+        for y in graph.adjacencias(x):
+            if (x, y) in C:
+                if C[(x, y)] == False:
+                    open_neighbors.append(x)
+
+            elif (y, x) in C:
+                if C[(y, x)] == False:
+                    open_neighbors.append(x)
+
+    if not open_neighbors:
+        return True, ciclo
+
+    for x in open_neighbors:
+        r, ciclo_2 = find_eulerian_subcycle(graph, x, C)
+
+        if r == False:
+            return False, None
+
+        for x in ciclo:
+            if x == ciclo_2[0]:
+                index = ciclo.index(x)
+                ciclo[index + 1 : index + 1] = ciclo_2
+                ciclo.pop(index)
+                break
+
+        return True, ciclo
 
 
+def print_output(result: tuple):
+    (has_eulerian, cycle) = result
 
+    if has_eulerian:
+        cycle_str = ",".join(str(v) for v in cycle)
+        print(1)
+        print(cycle_str)
+    else:
+        print(0)
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 1 or len(sys.argv) > 3:
-        print('\n> Uso: python bfs.py graph_filename\n')
+    if len(sys.argv) < 2 or len(sys.argv) > 3:
+        print("\n> Uso: python eulerian.py graph_filename graph_index\n")
         sys.exit(1)
 
     graph_filename = sys.argv[1]
@@ -101,12 +115,12 @@ if __name__ == "__main__":
         sys.exit(1)
 
     try:
-        grafo = Grafo() # Inicializa o grafo vazio
-        grafo.ler(graph_filename) # Adiciona elementos ao grafo
-
+        grafo = Grafo()  # Inicializa o grafo vazio
+        grafo.ler(graph_filename)  # Adiciona elementos ao grafo
     except Exception as e:
         print(f"\n> Erro ao incializar o grafo: {e}\n")
         sys.exit(1)
 
-    # Executa o ciclo_euleriano
-    ciclo_euleriano(grafo)
+    # Executa a busca em largura
+    result = hierholzer(grafo)
+    print_output(result)
