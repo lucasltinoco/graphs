@@ -11,7 +11,7 @@ args:
     graph: Grafo()
     s: indice do vertice inicial
 """
-from grafo import Grafo
+from A1_1 import Grafo
 
 def dfs(graph: Grafo, s: int):
     pass

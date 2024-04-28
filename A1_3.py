@@ -9,7 +9,7 @@ args:
     graph: Grafo()
 """
 
-from grafo import Grafo
+from A1_1 import Grafo
 import sys, os
 import random
 

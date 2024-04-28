@@ -7,7 +7,7 @@ utilizando o formato do exemplo abaixo. Na saida, cada linha tera as distancias 
 dos indices informados no arquivo de entrada
 """
 import os, sys
-from grafo import Grafo
+from A1_1 import Grafo
 from math import inf
 
 def floyd_warshall(graph: Grafo):

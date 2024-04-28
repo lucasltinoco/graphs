@@ -13,7 +13,7 @@ para percorrer o caminho.
 
 """
 import os, sys
-from grafo import Grafo
+from A1_1 import Grafo
 from math import inf
 
 def dijkstra(graph: Grafo, origin_index):

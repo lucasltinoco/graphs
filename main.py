@@ -1,4 +1,4 @@
-from grafo import Grafo
+from A1_1 import Grafo
 
 def main():
   V = [(0, "A"), (1, "B"), (2, "C"), (3, "D"), (4, "E")]

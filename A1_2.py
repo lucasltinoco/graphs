@@ -9,7 +9,7 @@ args:
     graph: Grafo()
     s: indice do vertice inicial
 """
-from grafo import Grafo
+from A1_1 import Grafo
 import sys, os
 from math import inf
 from queue import Queue
