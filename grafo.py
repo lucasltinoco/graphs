@@ -44,7 +44,14 @@ class Grafo:
       else:
         vizinhos.append(a)
     return [vertice[0] for vertice in self.V if vertice[0] in vizinhos]
-  
+
+  def adjacencias(self, v: tuple) -> list:
+    """
+    Retorna uma lista de vértices vizinhos a v
+    """
+    vizinhos = self.vizinhos(v[0])
+    return [self.V[index-1] for index in vizinhos]  # Retorna os vértices correspondentes aos índices de vizinhos
+
 
   def haAresta(self, u, v):
     return (u in self.E[v]) or (v in self.E[u])
